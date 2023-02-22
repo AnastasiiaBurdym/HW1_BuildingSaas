@@ -41,7 +41,6 @@ def get_weather():
         raise InvalidUsage('Invalid token', status_code=401)
 
     city = request.json.get('city')
-    forecast_days = request.json.get('forecast_days')
     date_str = request.json.get('date')
 
     try:
@@ -49,15 +48,17 @@ def get_weather():
     except ValueError:
         raise InvalidUsage('Invalid date format', status_code=400)
 
-    url = 'http://api.weatherapi.com/v1/history.json'
+    url = 'http://api.weatherapi.com/v1/forecast.json'
     headers = {'Content-Type': 'application/json'}
     params = {
         'key': "b59bc090bc3542759fb165122231902",
         'q': city,
-        'dt': date.strftime('%Y-%m-%d'),
-        'forecast_days': forecast_days
+        'dt': date_str
     }
     response = requests.get(url, headers=headers, params=params)
+    if response.status_code != 200:
+        raise InvalidUsage('Error getting weather data from API', status_code=500)
+
     weather_data = response.json()
     user_name = request.json.get('name')
     date_requested = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -66,6 +67,8 @@ def get_weather():
         'date_requested': date_requested,
         'city': city
     })
+
+
     return jsonify(weather_data)
 
 if __name__ == '__main__':
