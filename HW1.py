@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import requests
 from datetime import datetime
 
-API_TOKEN = "nnn"
+API_TOKEN = "your_api_token"
 
 app = Flask(__name__)
 
@@ -51,7 +51,7 @@ def get_weather():
     url = 'http://api.weatherapi.com/v1/forecast.json'
     headers = {'Content-Type': 'application/json'}
     params = {
-        'key': "b59bc090bc3542759fb165122231902",
+        'key': "your_api_key",
         'q': city,
         'dt': date_str
     }
